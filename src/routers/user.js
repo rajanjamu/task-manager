@@ -102,7 +102,7 @@ const upload = multer({
     }
 })
 
-// UPLOAD IMAGE
+// UPLOAD AVATAR
 router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
     const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
     req.user.avatar = buffer
@@ -112,13 +112,14 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
     res.status(400).send({ error: error.message })
 })
 
-// DELETE IMAGE
+// DELETE AVATAR
 router.delete('/users/me/avatar', auth, async (req, res) => {
     req.user.avatar = undefined
     await req.user.save()
     res.send()
 })
 
+// GET AVATAR
 router.get('/users/:id/avatar', async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
